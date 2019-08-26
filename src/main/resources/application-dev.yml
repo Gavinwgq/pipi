@@ -7,6 +7,7 @@ spring:
     password: 123456
     url: jdbc:mysql://localhost:3306/pipi?characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
     driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initialSize: 5
       minIdle: 5
@@ -20,6 +21,8 @@ spring:
       testOnReturn: false
       poolPreparedStatements: true
       maxPoolPreparedStatementPerConnectionSize: 20
+      #监控统计拦截的filters
+      filters: stat,wall,log4j
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*Mapper.xml
