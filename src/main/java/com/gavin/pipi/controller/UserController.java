@@ -18,7 +18,7 @@ import org.springframework.stereotype.Controller;
  */
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends BaseController {
 
     @Autowired
     private IUserService userService;
@@ -32,7 +32,7 @@ public class UserController {
 
     @PostMapping("/add")
     public void addUser(@RequestBody User user) {
-        user.setUserId(100L);
+        user.setUserId(genId());
         userService.insert(user);
     }
 }
