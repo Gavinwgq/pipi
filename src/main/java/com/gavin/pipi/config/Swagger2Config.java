@@ -35,7 +35,8 @@ public class Swagger2Config {
                 .title("pipi系统Restful API")
                 .description("pipi系统Restful API")
                 .termsOfServiceUrl("http://127.0.0.1:8080/")
-                .contact(new Contact("Gavin","https://blog.csdn.net/henuboy","henuboy@live.com"))
+                //.contact(new Contact("Gavin","https://blog.csdn.net/henuboy","henuboy@live.com"))
+                .contact("wangguoqiang")
                 .version("1.0")
                 .build();
     }
