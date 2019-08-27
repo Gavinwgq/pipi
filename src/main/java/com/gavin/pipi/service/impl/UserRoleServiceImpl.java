@@ -4,6 +4,8 @@ import com.gavin.pipi.entity.UserRole;
 import com.gavin.pipi.dao.UserRoleMapper;
 import com.gavin.pipi.service.IUserRoleService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,5 +18,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements IUserRoleService {
-
+    private static final Logger logger = LoggerFactory.getLogger(UserRoleServiceImpl.class);
 }

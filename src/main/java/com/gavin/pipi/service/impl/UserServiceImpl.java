@@ -4,6 +4,8 @@ import com.gavin.pipi.entity.User;
 import com.gavin.pipi.dao.UserMapper;
 import com.gavin.pipi.service.IUserService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,5 +18,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
-
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 }

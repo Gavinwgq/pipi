@@ -1,5 +1,4 @@
 package com.gavin.pipi.controller;
-import	java.security.Identity;
 
 import com.gavin.pipi.utils.IdWorker;
 import org.springframework.web.bind.annotation.RequestMapping;
