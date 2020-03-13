@@ -46,25 +46,44 @@ public class MqttClientFactory {
         System.out.println("推送消息");
         String msg = "hello mqtt!";
         String topic = "test/Gavin";
-        //subscribe(topic);
-        publish(topic,msg+ RandomStringUtils.random(8));
+        Mqtt5BlockingClient client = getClient();
+        client.connect();
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        AtomicInteger atomicInteger = new AtomicInteger();
+        boolean exeFlag = true;
+        while (exeFlag){
+            if (atomicInteger.get() <= 30){
+                service.execute(() -> {
+                    String m = msg +"-" + RandomStringUtils.random(6,new char[]{'a','b','3','5','7','2','y'});
+                    System.out.println("消息："+m);
+                    client.publishWith().topic(topic).qos(MqttQos.AT_LEAST_ONCE).payload(m.getBytes()).retain(true).send();
+                    atomicInteger.getAndIncrement();
+                });
+            }else {
+                if (((ThreadPoolExecutor)service).getActiveCount() == 0){
+                    service.shutdown();
+                    exeFlag=false;
+                }
+            }
+
+            Thread.sleep(1000);
+        }
+        client.disconnect();
+
 
     }
 
-    public static void subscribe(String topic){
-        final Mqtt5BlockingClient client = Mqtt5Client.builder()
-                .identifier(UUID.randomUUID().toString())
-                .serverHost("182.61.11.118")
-                .serverPort(1883)
-                .buildBlocking();
+    public static void subscribe(String topic,Mqtt5BlockingClient client){
         client.connect();
-
         try (final Mqtt5BlockingClient.Mqtt5Publishes publishes = client.publishes(MqttGlobalPublishFilter.ALL)) {
 
             client.subscribeWith().topicFilter(topic).qos(MqttQos.AT_LEAST_ONCE).send();
-
-            publishes.receive(1, TimeUnit.SECONDS).ifPresent(System.out::println);
-            publishes.receive(100, TimeUnit.MILLISECONDS).ifPresent(System.out::println);
+            while (true){
+                publishes.receive(100, TimeUnit.MILLISECONDS).ifPresent(mqtt5Publish ->{
+                    byte[] payloadAsBytes = mqtt5Publish.getPayloadAsBytes();
+                    System.out.println(new String(payloadAsBytes));
+                });
+            }
         }catch (Exception e){
             e.printStackTrace();
         } finally {
@@ -80,12 +99,14 @@ public class MqttClientFactory {
                 .buildBlocking();
         client.connect();
         client.publishWith().topic(topic).qos(MqttQos.AT_LEAST_ONCE).payload(msg.getBytes()).send();
-
-        final Mqtt5BlockingClient.Mqtt5Publishes publishes = client.publishes(MqttGlobalPublishFilter.ALL);
-        client.subscribeWith().topicFilter(topic).qos(MqttQos.AT_LEAST_ONCE).send();
-        publishes.receive(1, TimeUnit.SECONDS).ifPresent(System.out::println);
-        publishes.receive(100, TimeUnit.MILLISECONDS).ifPresent(System.out::println);
-
         client.disconnect();
+    }
+
+    public static Mqtt5BlockingClient getClient(){
+       return Mqtt5Client.builder()
+                .identifier(UUID.randomUUID().toString())
+                .serverHost("182.61.11.118")
+                .serverPort(1883)
+                .buildBlocking();
     }
 }
