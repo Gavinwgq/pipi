@@ -3,6 +3,7 @@ package com.gavin.pipi.juc;
 /**
  * volatile关键字可以是的多个线程操作共享变量时保持内存的可见性
  * 另外可以避免jvm的指令重排序
+ * 注意：volatile不能保证互斥性和变量的原子性
  * @date 2020/5/5 21:10
  */
 public class TestVolatile {
